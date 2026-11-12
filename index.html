@@ -5,37 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f3e7">
 <title>Underfoot · A sunflower puzzle</title>
-<style>
-:root{color-scheme:light;--ink:#233e32;--muted:#546758;--paper:#f7f3e7;--rule:#c4c5ad;--gold:#d49631;--gap:clamp(3px,.45vw,6px);--serif:Georgia,'Palatino Linotype',Palatino,serif;--sans:'Trebuchet MS','Avenir Next',Arial,sans-serif}
-*{box-sizing:border-box}html{min-height:100%;background:#f7f3e7}body{margin:0;color:var(--ink);font:15px/1.42 var(--sans);min-height:100svh;background:radial-gradient(ellipse at 12% 5%,#fffcf3 0,transparent 50%),radial-gradient(ellipse at 93% 88%,#e4e8d5 0,transparent 40%),var(--paper)}
-button{font:inherit;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #916107;outline-offset:4px}button:disabled{cursor:default}.defs{height:0;width:0;overflow:hidden;position:absolute}.icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.page{width:min(1010px,calc(100% - 64px));margin:0 auto;padding:clamp(16px,3vh,34px) 0 38px}
-.mast{position:relative;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #aab5a0;padding:0 0 17px;min-height:128px;isolation:isolate}
-.identity{position:relative;z-index:1}.identity h1{font:normal clamp(64px,7.15vw,91px)/.98 var(--serif);letter-spacing:-.078em;margin:0 0 7px -4px;color:#223e31}.identity p{margin:0 0 0 2px;color:var(--muted);font:italic 18px/1.3 var(--serif)}
-.meadow{position:absolute;bottom:-1px;right:0;width:47%;max-width:456px;height:auto;pointer-events:none}.mast-tools{display:flex;align-self:flex-start;gap:5px;z-index:2}
-.tool{display:inline-flex;gap:7px;align-items:center;justify-content:center;border:1px solid transparent;border-radius:30px;padding:7px 11px;background:#f7f3e7db;color:#344d3d;font-size:13px}.tool:hover{background:#e8ebdc;border-color:#c6cbb9}.tool .icon{width:17px;height:17px}
-.layout{display:grid;grid-template-columns:minmax(0,1.49fr) minmax(245px,.85fr);gap:clamp(28px,5.8vw,76px);align-items:start;padding-top:clamp(15px,2.4vh,28px)}
-.bedhead{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 10px}.guide h2{font:400 29px/1.2 var(--serif);letter-spacing:-.05em;margin:0}.moves{display:flex;align-items:baseline;gap:8px;color:var(--muted);font-size:13px}.moves strong{font:500 21px/1 var(--serif);color:var(--ink);font-variant-numeric:tabular-nums}
-.frame{position:relative;isolation:isolate;padding:clamp(15px,2.3vw,30px);border-radius:17px;background:#627448;border:2px solid #425738;box-shadow:0 2px 0 #f9f7e9 inset,0 4px 0 #344b35,0 13px 24px -17px #2a391dc0}
-.frame-rim{position:absolute;z-index:-1;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;border-radius:15px}
-.tiles{display:grid;grid-template-columns:repeat(var(--board-size),minmax(0,1fr));grid-template-rows:repeat(var(--board-size),minmax(0,1fr));gap:var(--gap);width:100%;aspect-ratio:1;position:relative;background:#887045;outline:none;touch-action:none;user-select:none;-webkit-user-select:none;border-radius:7px;box-shadow:0 0 0 3px #44573a,0 0 0 5px #94a473}
-.plot{appearance:none;position:relative;min-width:0;min-height:0;margin:0;padding:0;overflow:visible;background:var(--soil,#d7b584);border:0;border-radius:5px;box-shadow:inset 0 1px 0 #fcdeb1aa,inset 0 -2px 0 #86664055;cursor:default}
-.plot:before{content:'';position:absolute;inset:0;border-radius:inherit;background-image:var(--grain);background-position:var(--grain-x) var(--grain-y);opacity:.63;pointer-events:none}
-.plot.legal{cursor:pointer}.plot.legal:hover{background:#edcd93}.plot .hintmark{display:none;pointer-events:none;position:absolute;inset:0;align-items:center;justify-content:center}.legal .hintmark{display:flex}.hintmark span{display:grid;place-items:center;width:32%;aspect-ratio:1;border:1px dashed #7f724baa;border-radius:50%;color:#736343}.hintmark svg{width:64%;height:64%;display:block;stroke-width:1.7}.plot.match-option{background:#ead19b}.plot.match-option:after{content:"";position:absolute;inset:3px;border:2px solid #aa813b;border-radius:4px;pointer-events:none}.plot.selected-match{background:#efd393}.plot.selected-match:after{border:3px solid #8c5e13;box-shadow:inset 0 0 0 2px #fff0bb}.plot.current{box-shadow:inset 0 0 0 2px #606e3b,inset 0 0 0 4px #f4dba377}.crop{display:block;position:absolute;inset:1%;width:98%;height:98%;pointer-events:none;transform-origin:50% 80%}.plot.current .crop{width:67%;height:72%;left:31%;top:3%}.crop:empty{display:none}
-.mouse{position:absolute;left:-4%;bottom:0;width:79%;height:79%;z-index:3;pointer-events:none;transform-origin:45% 85%}.mouse svg{width:100%;height:100%;overflow:visible}.mouse.face-left svg{transform:scaleX(-1)}.ghost{position:absolute;pointer-events:none;z-index:5;transform-origin:center}.choice-arrow{position:absolute;z-index:8;display:flex;align-items:center;justify-content:center;gap:3px;min-width:30px;height:30px;padding:4px;background:#fff7dd;color:#493c1c;border:2px solid #81601d;border-radius:7px;box-shadow:0 2px 4px #45331b44;transform:translate(-50%,-50%);font-size:12px;touch-action:none}.choice-arrow:hover,.choice-arrow:focus-visible{background:#ffe39a}.choice-arrow .icon{width:18px;height:18px;stroke-width:2}.choice-arrow.axis-H{border-left-width:4px;border-right-width:4px}.choice-arrow.axis-V{border-top-width:4px;border-bottom-width:4px}.soil-flash{position:absolute;inset:8%;border-radius:45%;border:2px solid #f8df76;pointer-events:none;z-index:2}
-.statusbar{display:flex;align-items:flex-start;min-height:3.4em;gap:9px;margin:14px 0 5px;color:#455e46;font:italic 16px/1.36 var(--serif)}.statusbar>.icon{width:18px;height:18px;margin-top:1px;color:#657e48}.statusbar.win{color:#6d4a10}
-.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #98a588;border-radius:8px;background:#f8f6ed;min-height:39px;padding:7px 14px;font-size:14px;color:var(--ink)}.btn:hover{background:#e7ecdc;border-color:#738268}.btn:disabled{opacity:.48}.btn:disabled:hover{background:#f8f6ed;border-color:#98a588}.btn.solid{color:#fffbec;background:#354e38;border-color:#354e38}.btn.solid:hover{background:#48603f}
-.guide{margin-top:2px}.stages{margin:15px 0 0;padding:0;list-style:none;border-top:1px solid var(--rule)}.stage{display:flex;align-items:center;gap:12px;padding:4px 0;min-height:70px;border-bottom:1px solid var(--rule)}.stage-art{flex:none;width:67px;height:61px}.stage-text{min-width:0}.stage h3{font:normal 21px/1.2 var(--serif);letter-spacing:-.035em;margin:0}.controls{margin-top:22px}.controls h3{font-size:14px;font-weight:650;margin:0 0 7px}.controls p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.keys{display:inline-flex;gap:3px;vertical-align:middle;margin-left:4px}.keys kbd{font:14px/1 var(--sans);padding:3px 4px;border:1px solid #b4bdab;border-bottom-width:2px;border-radius:4px;background:#fcfaef;color:#415740}.best{margin-top:16px;color:var(--muted);font:italic 14px var(--serif)}
-#gate-flower{display:none}.earned #gate-flower{display:inline}
-dialog{color:var(--ink);background:var(--paper);border:1px solid #91a287;border-radius:14px;width:min(390px,calc(100% - 32px));padding:25px;box-shadow:0 20px 65px #192d2555}dialog::backdrop{background:#243d3380}.dialog-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.dialog-top h2{font:normal 29px var(--serif);letter-spacing:-.045em;margin:0}.dialog-top .tool{padding:6px}.dialog-body{font-size:15px;color:#405342}.dialog-body p{margin:0 0 .8em}.dialog-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-@media(min-width:1050px) and (max-height:830px){.page{width:min(915px,calc(100% - 64px));padding-top:14px}.mast{min-height:104px}.identity h1{font-size:72px}.layout{padding-top:16px;gap:56px}.frame{padding:23px}.statusbar{min-height:2.8em}}
-@media(max-width:850px) and (min-width:701px){.page{width:calc(100% - 40px)}.layout{grid-template-columns:minmax(0,1.42fr) minmax(210px,.83fr);gap:24px}.stage{min-height:58px;gap:7px}.stage-art{width:52px;height:51px}.statusbar{font-size:15px}}
-@media(max-width:700px){.page{width:min(490px,calc(100% - 30px));padding-top:13px}.mast{min-height:98px;padding-bottom:14px}.identity h1{font-size:clamp(53px,13vw,70px)}.identity p{font-size:15px}.meadow{width:44%;max-height:68px}.mast-tools{gap:1px}.mast-tools .tool{padding:6px}.mast-tools .tool span{display:none}.layout{display:flex;flex-direction:column;gap:22px;padding-top:17px}.play,.guide{width:100%}.guide h2{font-size:24px}.bedhead{margin-bottom:8px}.frame{padding:clamp(14px,4.2vw,21px)}.statusbar{min-height:2.55em;font-size:15px;margin-top:13px}.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--rule);margin-top:10px}.stage{display:block;text-align:center;min-height:0;padding:5px 1px 9px;border:0}.stage-art{width:58px;height:52px;max-width:100%}.stage h3{font-size:15px;letter-spacing:-.035em}.controls{margin-top:12px}.best{margin-top:10px}}
-@media(max-width:350px){.page{width:calc(100% - 20px)}.stage h3{font-size:13px}.btn{padding:6px 10px}}
-@media(min-width:900px){.page{--bed-width:clamp(395px,calc(100svh - 279px),552px);width:min(calc(var(--bed-width) + 375px),calc(100% - 52px));padding-bottom:23px}.layout{grid-template-columns:minmax(0,var(--bed-width)) minmax(220px,1fr);gap:clamp(28px,4vw,56px)}.statusbar{min-height:2.25em}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important}}
-</style>
+<link rel="stylesheet" href="assets/css/underfoot.css">
+<script src="assets/js/underfoot.js" defer></script>
 </head>
+
 <body>
 <svg class="defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
 <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
@@ -143,579 +116,68 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid #91a287;border-
 <button type="button" class="btn" id="restart"><svg class="icon" aria-hidden="true"><use href="#i-new"/></svg>New garden</button>
 </div>
 </section>
+
 <aside class="guide" aria-labelledby="guide-title">
-<h2 id="guide-title" class="sr">Plant stages</h2>
-<ol class="stages">
-<li class="stage"><svg class="stage-art" aria-hidden="true"><use href="#plant1"/></svg><div class="stage-text"><h3>Shoot</h3></div></li>
-<li class="stage"><svg class="stage-art" aria-hidden="true"><use href="#plant2"/></svg><div class="stage-text"><h3>Bud</h3></div></li>
-<li class="stage"><svg class="stage-art" aria-hidden="true"><use href="#plant3"/></svg><div class="stage-text"><h3>Sunflower</h3></div></li>
-<li class="stage"><svg class="stage-art" aria-hidden="true"><use href="#plant4"/></svg><div class="stage-text"><h3>Seed head</h3></div></li>
-</ol>
-<div class="controls"><h3>How to move</h3><p id="controls-text">Use the arrow keys <span class="keys" aria-hidden="true"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd></span><br>Swipe or tap to walk.<br>Trios can grow straight or diagonally.<br>Single trios grow automatically.<br>For a choice, press or tap a shown arrow.</p></div>
-<div class="best">Best grown · <span id="best">Shoot</span></div>
+  <h2 id="guide-title" class="sr">Plant stages</h2>
+
+  <p class="guide-intro">
+    Match three plants at the same stage to grow to the next stage.
+    Reach a <strong>Seed head</strong> before harvest time to win.
+  </p>
+
+  <ol class="stages">
+    <li class="stage">
+      <svg class="stage-art" aria-hidden="true"><use href="#plant1"/></svg>
+      <div class="stage-text"><h3>Shoot</h3></div>
+    </li>
+    <li class="stage">
+      <svg class="stage-art" aria-hidden="true"><use href="#plant2"/></svg>
+      <div class="stage-text"><h3>Bud</h3></div>
+    </li>
+    <li class="stage">
+      <svg class="stage-art" aria-hidden="true"><use href="#plant3"/></svg>
+      <div class="stage-text"><h3>Sunflower</h3></div>
+    </li>
+    <li class="stage">
+      <svg class="stage-art" aria-hidden="true"><use href="#plant4"/></svg>
+      <div class="stage-text"><h3>Seed head</h3></div>
+    </li>
+  </ol>
+
+  <div class="controls">
+    <h3>How to move</h3>
+    <p id="controls-text">
+      Use the arrow keys
+      <span class="keys" aria-hidden="true">
+        <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+      </span>
+      <br>
+      Swipe or tap to walk.<br>
+      Trios can grow straight or diagonally.<br>
+      Single trios grow automatically.<br>
+      For a choice, press or tap a shown arrow.
+    </p>
+  </div>
+
+  <div class="best">
+    Best grown · <span id="best">Shoot</span>
+  </div>
 </aside>
-</div></main>
+
+
+
+</div>
+
+<footer class="site-footer" aria-label="Site information">
+  <a href="about">About</a>
+  <span aria-hidden="true">·</span>
+  <a href="legal">Legal</a>
+</footer>
+</main>
+
 <dialog id="dialog" aria-labelledby="dialog-title">
 <div class="dialog-top"><h2 id="dialog-title"></h2><button type="button" id="close" class="tool" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
 <div class="dialog-body" id="dialog-body"></div><div class="dialog-actions" id="dialog-actions"></div></dialog>
-<script>
-'use strict';
-const SIZE = 6;
-const DIRECTIONS = { U:[-1,0], D:[1,0], L:[0,-1], R:[0,1] };
-const MATCH_AXES = [
-  {id:'H',label:'Row',name:'row',back:[0,-1],forward:[0,1],choiceKey:'L'},
-  {id:'V',label:'Column',name:'column',back:[-1,0],forward:[1,0],choiceKey:'U'},
-  {id:'D1',label:'Diag ↘',name:'down-right diagonal',back:[-1,-1],forward:[1,1],choiceKey:'R'},
-  {id:'D2',label:'Diag ↙',name:'down-left diagonal',back:[-1,1],forward:[1,-1],choiceKey:'D'}
-];
-const NAMES = ['Bare soil','Shoot','Bud','Sunflower','Seed head'];
-const START = 0;
-function freshGarden() {
-  const soil = Array(SIZE * SIZE).fill(0);
-  soil[START] = 1;
-  return { soil, mouse:START };
-}
-function offsetPosition(pos, delta) {
-  const [dy,dx] = delta;
-  const y = Math.floor(pos / SIZE) + dy, x = pos % SIZE + dx;
-  return x >= 0 && x < SIZE && y >= 0 && y < SIZE ? y * SIZE + x : -1;
-}
-function neighbour(pos, direction) {
-  return offsetPosition(pos,DIRECTIONS[direction]);
-}
-function legalMoves(garden) {
-  if (garden.soil.includes(4) || matchingTriples(garden).length) return [];
-  return Object.keys(DIRECTIONS).filter(d => garden.soil[neighbour(garden.mouse,d)] === 0);
-}
-function contiguous(soil, origin, delta) {
-  const cells = [];
-  let pos = offsetPosition(origin,delta);
-  while (pos >= 0 && soil[pos] === soil[origin]) {
-    cells.push(pos);
-    pos = offsetPosition(pos,delta);
-  }
-  return cells;
-}
-function matchingTriples(garden) {
-  const target=garden.mouse, level=garden.soil[target];
-  if(!level || level>=4) return [];
-  const triples=[];
-  for(const axis of MATCH_AXES) {
-    const line=contiguous(garden.soil,target,axis.back).reverse()
-      .concat(target,contiguous(garden.soil,target,axis.forward));
-    for(let start=0;start<=line.length-3;start++) {
-      const cells=line.slice(start,start+3);
-      if(cells.includes(target)) triples.push({axis:axis.id,cells});
-    }
-  }
-  return triples;
-}
-function connectedMatches(garden,axis=null) {
-  const cells=new Set();
-  for(const group of matchingTriples(garden)) {
-    if(!axis || group.axis===axis) group.cells.forEach(pos=>cells.add(pos));
-  }
-  return cells;
-}
-function axisChoicePosition(garden,key) {
-  const direct=neighbour(garden.mouse,key);
-  if(direct>=0) return direct;
-  const opposite={L:'R',R:'L',U:'D',D:'U'}[key];
-  const fallback=neighbour(garden.mouse,opposite);
-  return fallback>=0?fallback:garden.mouse;
-}
-function primaryDecisionKey(item,mousePos) {
-  if(item.pos===mousePos) return null;
-  const my=Math.floor(mousePos/SIZE), mx=mousePos%SIZE;
-  const cy=Math.floor(item.pos/SIZE), cx=item.pos%SIZE;
-  if(item.axis==='H') return cx<mx?'L':'R';
-  if(item.axis==='V') return cy<my?'U':'D';
-  return cy<my?'U':'D';
-}
-function decisionKeyPreferences(item,mousePos) {
-  const my=Math.floor(mousePos/SIZE), mx=mousePos%SIZE;
-  const cy=Math.floor(item.pos/SIZE), cx=item.pos%SIZE;
-  const dy=Math.sign(cy-my), dx=Math.sign(cx-mx);
-  if(dy<0 && dx<0) return ['U','L','R','D'];
-  if(dy<0 && dx>0) return ['U','R','L','D'];
-  if(dy>0 && dx<0) return ['D','L','R','U'];
-  if(dy>0 && dx>0) return ['D','R','L','U'];
-  if(dx<0) return ['L','U','D','R'];
-  if(dx>0) return ['R','U','D','L'];
-  if(dy<0) return ['U','L','R','D'];
-  if(dy>0) return ['D','L','R','U'];
-  if(item.axis==='H') return ['L','R','U','D'];
-  if(item.axis==='V') return ['U','D','L','R'];
-  if(item.axis==='D1') return ['R','D','L','U'];
-  return ['D','L','U','R'];
-}
-function decisionOptions(garden,options,axis=null) {
-  if(options.length<=1) return [];
-  // More than four overlapping trios exceed the four arrow keys. Narrow the line first.
-  if(options.length>4 && !axis) {
-    return MATCH_AXES
-      .filter(definition=>options.some(group=>group.axis===definition.id))
-      .map(definition=>({
-        key:definition.choiceKey,
-        axis:definition.id,
-        label:definition.label,
-        name:definition.name,
-        pos:axisChoicePosition(garden,definition.choiceKey),
-        cells:[...connectedMatches(garden,definition.id)]
-      }));
-  }
-  const groups=options.filter(group=>!axis || group.axis===axis);
-  const decisions=groups.map(group=>({...group,pos:group.cells[1],key:null}));
-  const used=new Set();
-  // Reserve spatial directions first, then assign any centred or conflicting choices.
-  for(const item of decisions) {
-    const key=primaryDecisionKey(item,garden.mouse);
-    if(key && !used.has(key)) {
-      item.key=key;
-      used.add(key);
-    }
-  }
-  for(const item of decisions) {
-    if(item.key) continue;
-    item.key=decisionKeyPreferences(item,garden.mouse).find(key=>!used.has(key));
-    if(item.key) used.add(item.key);
-  }
-  return decisions;
-}
-function plant(garden, direction) {
-  if(!Object.hasOwn(DIRECTIONS,direction) || garden.soil.includes(4) || matchingTriples(garden).length) return null;
-  const target=neighbour(garden.mouse,direction);
-  if(target<0 || garden.soil[target]!==0) return null;
-  const soil=garden.soil.slice();
-  soil[target]=1;
-  return {soil,mouse:target};
-}
-function mergeTriple(garden,cells) {
-  if(!Array.isArray(cells) || cells.length!==3) return null;
-  const option=matchingTriples(garden).find(group=>group.cells.every((pos,index)=>pos===cells[index]));
-  if(!option) return null;
-  const soil=garden.soil.slice();
-  const cleared=option.cells.filter(pos=>pos!==garden.mouse);
-  for(const pos of cleared) soil[pos]=0;
-  soil[garden.mouse]++;
-  return {garden:{soil,mouse:garden.mouse},event:{level:soil[garden.mouse],cleared,soil}};
-}
-</script>
-<script>
-const $ = id => document.getElementById(id);
-const SVG_NS = 'http://www.w3.org/2000/svg';
-const board = $('board');
-const SAVE_KEY = 'underfoot.garden.v4';
-const LEGACY_SAVE_KEYS = ['underfoot.garden.v3','underfoot.garden.v2','underfoot.garden.v1'];
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const directionsByKey = {ArrowUp:'U',ArrowDown:'D',ArrowLeft:'L',ArrowRight:'R',w:'U',a:'L',s:'D',d:'R'};
-const arrowAngles = {R:0,D:90,L:180,U:270};
-const soils = ['#dfbf90','#e3c496','#dabb8e','#dfbd90','#e4c79c','#d9b98d','#e0c191'];
-const plots = [], crops = [];
-let garden = freshGarden(), moves = [], history = [], actions = [], record = 1, sound = false;
-let choices = [], decisions = [], choiceAxis = null;
-let faceLeft = false, busy = false, generation = 0, audio = null;
-let gesture = null, suppressClickUntil = 0, lastKeyAt = 0, dialogTrigger = null;
-
-function svgUse(id, className) {
-  const svg = document.createElementNS(SVG_NS,'svg');
-  svg.setAttribute('aria-hidden','true');
-  if (className) svg.setAttribute('class',className);
-  const use = document.createElementNS(SVG_NS,'use');
-  use.setAttribute('href','#'+id);
-  svg.append(use);
-  return svg;
-}
-const mouse = document.createElement('span');
-mouse.className = 'mouse';
-mouse.append(svgUse('fieldmouse'));
-
-function prepareBoard() {
-  board.style.setProperty('--board-size',SIZE);
-  board.setAttribute('aria-label',SIZE+' by '+SIZE+' garden. Use the arrow keys to walk on bare soil.');
-  const grain = '<svg xmlns="http://www.w3.org/2000/svg" width="88" height="78" viewBox="0 0 88 78"><g fill="none" stroke="#987b50" stroke-width="1" stroke-linecap="round" opacity=".59"><path d="m8 14 3-1m50 8 4-1m9 17 1-.3M38 61l3-1m-25 7 1 .2m34-27 2-.6m-23-9 1.3-.8"/></g><g fill="#b29972" opacity=".7"><circle cx="21" cy="21" r=".7"/><circle cx="68" cy="64" r=".9"/><circle cx="42" cy="17" r=".6"/></g></svg>';
-  board.style.setProperty('--grain','url("data:image/svg+xml,'+encodeURIComponent(grain)+'")');
-  for (let pos=0; pos<SIZE*SIZE; pos++) {
-    const tile = document.createElement('button');
-    tile.type = 'button'; tile.className = 'plot'; tile.tabIndex = -1;
-    tile.dataset.pos = pos;
-    tile.style.setProperty('--soil',soils[(pos*11+Math.floor(pos/SIZE)*3)%soils.length]);
-    tile.style.setProperty('--grain-x',((pos*17)%88)+'px');
-    tile.style.setProperty('--grain-y',((pos*11)%78)+'px');
-    const crop = document.createElementNS(SVG_NS,'svg');
-    crop.setAttribute('class','crop'); crop.setAttribute('aria-hidden','true');
-    const hint = document.createElement('span'); hint.className = 'hintmark';
-    const ring = document.createElement('span'); ring.append(svgUse('i-arrow','icon'));
-    hint.append(ring); tile.append(crop,hint); board.append(tile);
-    plots.push(tile); crops.push(crop);
-  }
-  const rim = $('rim');
-  const parts = ['<defs><g id="grass"><path d="M0 9Q2 4 0-1m1 9Q4 2 9 1M0 9Q-2 4-6 3" fill="none" stroke="#405a37" stroke-width="1.2" stroke-linecap="round"/><path d="M2 8 6 3" stroke="#9da96e" stroke-width="1.1"/></g><g id="smallflower"><g fill="#f2df9e"><ellipse cy="-2.8" rx="1.7" ry="2.5"/><ellipse cy="-2.8" rx="1.7" ry="2.5" transform="rotate(72)"/><ellipse cy="-2.8" rx="1.7" ry="2.5" transform="rotate(144)"/><ellipse cy="-2.8" rx="1.7" ry="2.5" transform="rotate(216)"/><ellipse cy="-2.8" rx="1.7" ry="2.5" transform="rotate(288)"/></g><circle r="1.8" fill="#b98a35"/></g></defs>'];
-  for (let edge=0; edge<4; edge++) {
-    parts.push('<g transform="rotate('+(edge*90)+' 275 275)">');
-    for (let i=0;i<26;i++) {
-      const x=9+i*21+(i*7+edge*5)%8, y=5+(i*11+edge*3)%12;
-      parts.push('<use href="#grass" transform="translate('+x+' '+y+') rotate('+((i*19+edge*9)%50-25)+') scale('+(.6+(i%4)*.12)+')"/>');
-      if ((i+edge*3)%9===3) parts.push('<use href="#smallflower" transform="translate('+(x+4)+' '+y+') scale(.72)"/>');
-    }
-    parts.push('</g>');
-  }
-  rim.innerHTML = parts.join('');
-}
-
-function positionName(pos) { return String.fromCharCode(65+pos%SIZE)+(Math.floor(pos/SIZE)+1); }
-function renderSoil(soil,pos,showLegal) {
-  const legal = showLegal ? legalMoves({soil,mouse:pos}) : [];
-  for (let i=0;i<plots.length;i++) {
-    const tile=plots[i], level=soil[i], crop=crops[i];
-    if (crop.dataset.level !== String(level)) {
-      crop.replaceChildren();
-      if (level) {
-        const use=document.createElementNS(SVG_NS,'use'); use.setAttribute('href','#plant'+level);
-        crop.append(use);
-      }
-      crop.dataset.level=level;
-    }
-    crop.style.visibility='';
-    tile.classList.toggle('current',i===pos);
-    const dir = legal.find(d=>neighbour(pos,d)===i);
-    tile.classList.toggle('legal',Boolean(dir));
-    if(dir) tile.querySelector('.hintmark svg').style.transform='rotate('+arrowAngles[dir]+'deg)';
-    tile.setAttribute('aria-label',positionName(i)+', '+NAMES[level]+(i===pos?', field mouse':dir?', available step':''));
-  }
-  if(mouse.parentNode!==plots[pos]) plots[pos].append(mouse);
-  mouse.classList.toggle('face-left',faceLeft);
-}
-function save() {
-  try { localStorage.setItem(SAVE_KEY,JSON.stringify({v:4,size:SIZE,actions,choiceAxis,record,sound})); }
-  catch { /* Play remains available when browser storage is restricted. */ }
-}
-function restore() {
-  try {
-    const saved=localStorage.getItem(SAVE_KEY);
-    if(saved===null) {
-      // Previous rules cannot replay the same path. Retain achievements and sound.
-      for(const key of LEGACY_SAVE_KEYS) {
-        const legacy=JSON.parse(localStorage.getItem(key));
-        if(legacy && [1,2,3].includes(legacy.v) && Number.isInteger(legacy.record) && legacy.record>=1 && legacy.record<=4) {
-          record=legacy.record; sound=legacy.sound===true;
-          break;
-        }
-      }
-      return;
-    }
-    const data=JSON.parse(saved);
-    if(!data || data.v!==4 || data.size!==SIZE) return;
-    if(!Number.isInteger(data.record) || data.record<1 || data.record>4) return;
-    record=data.record; sound=data.sound===true;
-    if(!Array.isArray(data.actions) || data.actions.length>2000) return;
-    let next=freshGarden();
-    const past=[], steps=[];
-    for(const action of data.actions) {
-      let result;
-      if(typeof action==='string') {
-        result=plant(next,action);
-      } else {
-        const merged=mergeTriple(next,action);
-        if(!merged) return;
-        result=merged.garden;
-      }
-      if(!result) return;
-      past.push({garden:next,moves:steps.slice()});
-      if(typeof action==='string') steps.push(action);
-      next=result;
-    }
-    garden=next; history=past; moves=steps; actions=data.actions;
-    choiceAxis=MATCH_AXES.some(axis=>axis.id===data.choiceAxis) && matchingTriples(garden).length>4?data.choiceAxis:null;
-    record=Math.max(record,...next.soil);
-    updateFacing();
-  } catch { /* An unreadable save starts a fresh garden. */ }
-}
-function updateFacing() {
-  faceLeft=moves.slice().reverse().find(d=>d==='L'||d==='R')==='L';
-}
-function updateHud() {
-  $('moves').textContent=moves.length;
-  $('best').textContent=NAMES[record];
-  $('undo').disabled=!history.length;
-  document.body.classList.toggle('earned',record===4);
-  $('statusbar').classList.toggle('win',garden.soil.includes(4));
-}
-function moveMessage(last) {
-  if(garden.soil.includes(4)) return 'A seed head in '+moves.length+' moves. A sunflower now grows by the gate.';
-  if(!legalMoves(garden).length) return 'The mouse is tucked into a corner. Undo a step to find another way through.';
-  if(!moves.length) return 'Walk right twice to grow your first bud.';
-  if(last) return NAMES[last]+' grown.';
-  if(moves.length===1 && moves[0]==='R') return 'Two shoots in a row. One more step right will make a bud.';
-  if(moves.length===1 && moves[0]==='D') return 'Two shoots in a column. One more step down will make a bud.';
-  if(legalMoves(garden).length===1) return 'One way out. Look for a line that will open more soil.';
-  return 'Leave the mouse a way through.';
-}
-function status(message) { $('status').textContent=message; }
-function soundButton() {
-  $('sound').setAttribute('aria-pressed',String(sound));
-  $('sound').setAttribute('aria-label',sound?'Turn sound off':'Turn sound on');
-  $('sound').title=sound?'Turn sound off':'Turn sound on';
-  $('sound').querySelector('use').setAttribute('href',sound?'#i-sound':'#i-mute');
-  $('sound').querySelector('span').textContent=sound?'Sound on':'Sound off';
-}
-function playTone(level) {
-  if(!sound) return;
-  try {
-    const Audio=window.AudioContext || window.webkitAudioContext;
-    if(!Audio) return;
-    if(!audio) audio=new Audio();
-    if(audio.state==='suspended') audio.resume().catch(()=>{});
-    const osc=audio.createOscillator(), gain=audio.createGain(), t=audio.currentTime;
-    const length=level===1?.13:.38;
-    osc.type='sine';osc.frequency.setValueAtTime([0,220,392,523.25,659.25][level],t);
-    gain.gain.setValueAtTime(.0001,t);
-    gain.gain.exponentialRampToValueAtTime(level===1?.045:.105,t+.015);
-    gain.gain.exponentialRampToValueAtTime(.0001,t+length);
-    osc.connect(gain);gain.connect(audio.destination);osc.start(t);osc.stop(t+length+.03);
-    osc.onended=()=>{osc.disconnect();gain.disconnect();};
-  } catch { /* Audio is optional. */ }
-}
-const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
-function motion(element,frames,options) {
-  if(!reduceMotion.matches && element.animate) return element.animate(frames,options);
-  return null;
-}
-function stopMotion() {
-  generation++; busy=false;
-  for(const anim of board.getAnimations ? board.getAnimations({subtree:true}) : []) anim.cancel();
-  board.querySelectorAll('.ghost,.soil-flash').forEach(el=>el.remove());
-}
-function hop(from,to) {
-  const a=plots[from].getBoundingClientRect(), b=plots[to].getBoundingClientRect();
-  const dx=a.left-b.left, dy=a.top-b.top;
-  motion(mouse,[{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'translate('+(dx*.45)+'px,'+(dy*.45-8)+'px)',offset:.55},{transform:'translate(0,0)'}],{duration:175,easing:'ease-out'});
-}
-function gather(event,target) {
-  const frame=board.getBoundingClientRect(), dest=plots[target].getBoundingClientRect();
-  for(const cell of event.cleared) {
-    const rect=plots[cell].getBoundingClientRect();
-    const ghost=svgUse('plant'+(event.level-1),'ghost');
-    Object.assign(ghost.style,{left:(rect.left-frame.left)+'px',top:(rect.top-frame.top)+'px',width:rect.width+'px',height:rect.height+'px'});
-    board.append(ghost); crops[cell].style.visibility='hidden';
-    motion(ghost,[{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+(dest.left-rect.left)+'px,'+(dest.top-rect.top)+'px) scale(.53)',opacity:.1}],{duration:165,fill:'forwards',easing:'ease-in'});
-  }
-}
-function sprout(target,large) {
-  motion(crops[target],[{transform:'scale(.76,.63)'},{transform:'scale(1.09,1.12)',offset:.65},{transform:'scale(1)'}],{duration:large?280:155,easing:'ease-out'});
-  if(large&&!reduceMotion.matches) {
-    const flash=document.createElement('span'); flash.className='soil-flash'; plots[target].append(flash);
-    motion(flash,[{opacity:.9,transform:'scale(.5)'},{opacity:0,transform:'scale(1.1)'}],{duration:310});
-    setTimeout(()=>flash.remove(),310);
-  }
-}
-function highlightChoice(cells=[]) {
-  plots.forEach((tile,pos)=>tile.classList.toggle('selected-match',cells.includes(pos)));
-}
-function choiceButtonOffset(index,count) {
-  if(count===2) return [[-17,0],[17,0]][index];
-  if(count===3) return [[0,-16],[-18,14],[18,14]][index];
-  if(count>=4) return [[-17,-15],[17,-15],[-17,15],[17,15]][index] || [0,0];
-  return [0,0];
-}
-function renderDecisions() {
-  board.querySelectorAll('.choice-arrow').forEach(button=>button.remove());
-  const frame=board.getBoundingClientRect();
-  for(const option of decisions) {
-    const rect=plots[option.pos].getBoundingClientRect();
-    const button=document.createElement('button');
-    button.type='button'; button.className='choice-arrow axis-'+option.axis;
-    const sameCentre=decisions.filter(item=>item.pos===option.pos);
-    const sameIndex=sameCentre.indexOf(option);
-    const [offsetX,offsetY]=choiceButtonOffset(sameIndex,sameCentre.length);
-    const anchorY=sameCentre.length>1?.5:.76;
-    button.style.left=((rect.left-frame.left+rect.width/2)/frame.width*100)+'%';
-    button.style.top=((rect.top-frame.top+rect.height*anchorY)/frame.height*100)+'%';
-    button.style.marginLeft=offsetX+'px';
-    button.style.marginTop=offsetY+'px';
-    const arrow=svgUse('i-arrow','icon'); arrow.style.transform='rotate('+arrowAngles[option.key]+'deg)';
-    button.append(arrow);
-    const keyNames={L:'Left',R:'Right',U:'Up',D:'Down'};
-    const lineName=option.name || option.label?.toLowerCase();
-    const description=option.label?'choose '+lineName:'grow '+option.cells.map(positionName).join(', ');
-    button.setAttribute('aria-label',keyNames[option.key]+': '+description);
-    button.title=keyNames[option.key]+': '+description;
-    if(option.label) button.append(document.createTextNode(option.label));
-    button.addEventListener('pointerenter',()=>highlightChoice(option.cells));
-    button.addEventListener('pointerleave',()=>highlightChoice());
-    button.addEventListener('focus',()=>highlightChoice(option.cells));
-    button.addEventListener('blur',()=>highlightChoice());
-    button.addEventListener('click',event=>{event.stopPropagation();chooseDirection(option.key);});
-    board.append(button);
-  }
-}
-function refresh(lastLevel) {
-  choices=matchingTriples(garden);
-  decisions=!busy?decisionOptions(garden,choices,choiceAxis):[];
-  renderSoil(garden.soil,garden.mouse,!choices.length && !busy);
-  const connected=decisions.length?connectedMatches(garden):new Set();
-  for(let pos=0;pos<plots.length;pos++) {
-    plots[pos].classList.toggle('match-option',connected.has(pos));
-    plots[pos].classList.remove('selected-match');
-    plots[pos].removeAttribute('aria-pressed');
-    if(connected.has(pos)) plots[pos].setAttribute('aria-label',plots[pos].getAttribute('aria-label')+', matching plant');
-  }
-  renderDecisions();
-  $('selection-detail').textContent=decisions.map(option=>option.key+': '+(option.label || option.cells.map(positionName).join(', '))).join('. ');
-  updateHud();
-  if(busy || choices.length===1) status('Growing…');
-  else if(decisions.some(option=>option.label)) status('Choose a line with a shown arrow.');
-  else if(decisions.length) status('Choose three. Press or tap a shown arrow.');
-  else status(moveMessage(lastLevel));
-}
-function chooseDirection(direction) {
-  if(busy || $('dialog').open) return;
-  const option=decisions.find(item=>item.key===direction);
-  if(!option) return;
-  if(option.label) {
-    choiceAxis=option.axis; refresh(); save(); board.focus({preventScroll:true});
-    return;
-  }
-  resolveGrowth(option.cells);
-}
-function remember(action) {
-  history.push({garden,moves:moves.slice()});
-  actions.push(action);
-}
-function walk(direction) {
-  if($('dialog').open || busy) return;
-  if(decisions.length) { chooseDirection(direction); return; }
-  const result=plant(garden,direction);
-  if(!result) {
-    if(legalMoves(garden).length) status('Choose a neighbouring bare plot.');
-    return;
-  }
-  const previous=garden;
-  remember(direction); moves.push(direction); garden=result; choiceAxis=null;
-  if(direction==='L'||direction==='R') faceLeft=direction==='L';
-  refresh(); save(); hop(previous.mouse,garden.mouse); sprout(garden.mouse,false); playTone(1);
-  resolveGrowth();
-}
-async function resolveGrowth(chosenCells=null) {
-  if(busy) return;
-  const options=matchingTriples(garden);
-  if(!chosenCells && options.length!==1) { refresh(); return; }
-  const ticket=++generation;
-  let cells=chosenCells || options[0].cells;
-  busy=true;
-  if(document.activeElement?.classList.contains('choice-arrow')) board.focus({preventScroll:true});
-  while(cells) {
-    const result=mergeTriple(garden,cells);
-    if(!result) break;
-    const target=garden.mouse;
-    remember(cells.slice()); garden=result.garden; choiceAxis=null;
-    record=Math.max(record,...garden.soil); save();
-    board.querySelectorAll('.choice-arrow').forEach(button=>button.remove());
-    decisions=[]; highlightChoice();
-    plots.forEach(tile=>tile.classList.remove('match-option'));
-    status('Growing…'); updateHud();
-    if(!reduceMotion.matches && Element.prototype.animate) {
-      gather(result.event,target); await sleep(165);
-      if(ticket!==generation) return;
-      board.querySelectorAll('.ghost').forEach(el=>el.remove());
-    }
-    if(ticket!==generation) return;
-    renderSoil(garden.soil,target,false); sprout(target,true); playTone(result.event.level);
-    const next=matchingTriples(garden);
-    if(next.length!==1) {
-      busy=false; refresh(result.event.level); return;
-    }
-    cells=next[0].cells;
-  }
-  busy=false; refresh();
-}
-function undoMove() {
-  if(!history.length) return;
-  stopMotion();
-  // Skip forced growth snapshots so Undo cannot immediately redo the same merge.
-  let previous;
-  do {
-    previous=history.pop(); actions.pop();
-  } while(history.length && matchingTriples(previous.garden).length===1);
-  garden=previous.garden; moves=previous.moves; choiceAxis=null;
-  updateFacing(); refresh(); save();
-  resolveGrowth();
-}
-function newGarden() {
-  stopMotion(); garden=freshGarden(); history=[]; moves=[]; actions=[]; choiceAxis=null; faceLeft=false;
-  refresh(); save();
-}
-function closeDialog() {
-  $('dialog').close();
-}
-function openDialog(title,paragraphs,actions) {
-  dialogTrigger=document.activeElement;
-  $('dialog-title').textContent=title;
-  $('dialog-body').replaceChildren(...paragraphs.map(value=>{const p=document.createElement('p');p.textContent=value;return p;}));
-  $('dialog-actions').replaceChildren();
-  for (const [label,handler,primary] of actions) {
-    const button=document.createElement('button');
-    button.type='button';button.className='btn'+(primary?' solid':'');button.textContent=label;
-    button.addEventListener('click',()=>{closeDialog();handler?.();});$('dialog-actions').append(button);
-  }
-  $('dialog').showModal();$('dialog-actions').firstElementChild?.focus();
-}
-$('close').onclick=closeDialog;
-$('dialog').addEventListener('click',event=>{if(event.target!==$('dialog')) return;const r=$('dialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom) closeDialog();});
-$('dialog').addEventListener('close',()=>{const target=dialogTrigger&&dialogTrigger.isConnected?dialogTrigger:board;target.focus({preventScroll:true});});
-$('help').onclick=()=>openDialog('How to play',[
-  'Walk onto bare soil to plant a shoot. The mouse only walks up, down, left, or right. Use the arrow keys or WASD, tap a neighbouring plot, or swipe across the bed.',
-  'A single matching trio grows automatically, including each forced step in a cascade. Exactly three matching plants combine each time, horizontally, vertically, or diagonally.',
-  'When several trios are possible, matching plants glow. Each shown arrow sits at the centre of its trio. Press that arrow key, swipe that direction, or tap the arrow to grow it immediately. Hover or focus an arrow to preview the exact three.',
-  'At crowded crossings with more than four choices, choose a line first, then a trio. Escape returns to the line choice. Grow a seed head to win.',
-  'Undo or Z returns to the previous move or choice, including its automatic growth. You can undo all the way to the beginning.'
-],[['Back to the garden',null,true]]);
-$('restart').onclick=()=>{
-  if(!moves.length || garden.soil.includes(4)) { newGarden(); return; }
-  openDialog('Start a new garden?',['Your current path will be cleared. Your best plant stays in the field guide.'],[['Keep playing',null,true],['New garden',newGarden,false]]);
-};
-$('undo').onclick=undoMove;
-$('sound').onclick=()=>{sound=!sound;soundButton();save();if(sound) playTone(2);};
-document.addEventListener('keydown',event=>{
-  if($('dialog').open || event.altKey || event.shiftKey) return;
-  const key=event.key.length===1?event.key.toLowerCase():event.key;
-  if(key==='z') {event.preventDefault();undoMove();return;}
-  if(event.metaKey||event.ctrlKey) return;
-  if(key==='Escape' && choiceAxis) { event.preventDefault(); choiceAxis=null; refresh(); save(); return; }
-  const direction=directionsByKey[key];
-  if(!direction) return;
-  event.preventDefault();
-  const now=performance.now();
-  if(event.repeat && (busy || decisions.length || now-lastKeyAt<135)) return;
-  lastKeyAt=now;walk(direction);
-});
-board.addEventListener('click',event=>{
-  if(performance.now()<suppressClickUntil) return;
-  const tile=event.target.closest('.plot');
-  if(!tile) return;
-  const pos=Number(tile.dataset.pos);
-  if(busy) return;
-  if(decisions.length) return;
-  const direction=Object.keys(DIRECTIONS).find(d=>neighbour(garden.mouse,d)===pos);
-  if(direction) walk(direction);
-  else if(legalMoves(garden).length) status('Tap a neighbouring bare plot to take one step.');
-});
-board.addEventListener('pointerdown',event=>{
-  if(!event.isPrimary || event.button!==0 || event.target.closest('.choice-arrow')) return;
-  gesture={x:event.clientX,y:event.clientY,id:event.pointerId};
-});
-window.addEventListener('pointerup',event=>{
-  if(!gesture||event.pointerId!==gesture.id) return;
-  const dx=event.clientX-gesture.x,dy=event.clientY-gesture.y;gesture=null;
-  if(Math.max(Math.abs(dx),Math.abs(dy))<Math.max(18,board.clientWidth*.055)) return;
-  suppressClickUntil=performance.now()+350;
-  walk(Math.abs(dx)>Math.abs(dy)?(dx>0?'R':'L'):(dy>0?'D':'U'));
-});
-window.addEventListener('pointercancel',()=>{gesture=null;});
-window.addEventListener('blur',()=>{gesture=null;});
-prepareBoard();restore();soundButton();
-refresh();resolveGrowth();
-</script>
 </body>
 </html>
 

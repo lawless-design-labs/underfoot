@@ -1,19 +1,6 @@
 #!/bin/bash
-set -euo pipefail
 
-cd "$(dirname "$0")"
+# Kill the jekyll process excluding the grep process itself
+kill -9 $(ps aux | grep '[j]ekyll' | awk '{print $2}')
+# kill -9 $(ps aux | grep jekyll | head -1 | awk '{print $2}')
 
-if [[ ! -f .jekyll.pid ]]; then
-  echo "No tracked Jekyll server is running."
-  exit 0
-fi
-
-pid="$(cat .jekyll.pid)"
-if kill -0 "$pid" 2>/dev/null; then
-  kill "$pid"
-  echo "Stopped Jekyll server (PID $pid)."
-else
-  echo "Tracked Jekyll process is no longer running."
-fi
-
-rm -f .jekyll.pid
