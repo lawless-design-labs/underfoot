@@ -1,6 +1,6 @@
-url: "https://underfoot.github.io"
-baseurl: ""
-repository: "https://github.com/lawless-design-labs/underfoot.github.io"
+url: "https://lawless-design-labs.github.io"
+baseurl: "/underfoot"
+
 permalink: pretty
 title: "Underfoot"
 description: "Small game about a field mouse’s sunflower garden"
