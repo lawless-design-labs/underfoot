@@ -144,6 +144,7 @@ function mergeTriple(garden,cells) {
 const $ = id => document.getElementById(id);
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const board = $('board');
+const DEV_ENDGAME = window.UNDERFOOT_DEV_ENDGAME ?? null;
 const SAVE_KEY = 'underfoot.garden.v4';
 const LEGACY_SAVE_KEYS = ['underfoot.garden.v3','underfoot.garden.v2','underfoot.garden.v1'];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -155,6 +156,7 @@ let garden = freshGarden(), moves = [], history = [], actions = [], record = 1, 
 let choices = [], decisions = [], choiceAxis = null;
 let faceLeft = false, busy = false, generation = 0, audio = null;
 let gesture = null, suppressClickUntil = 0, lastKeyAt = 0, dialogTrigger = null;
+let endStateTimer = null, endStatePresented = null;
 
 function svgUse(id, className) {
   const svg = document.createElementNS(SVG_NS,'svg');
@@ -226,6 +228,7 @@ function renderSoil(soil,pos,showLegal) {
   mouse.classList.toggle('face-left',faceLeft);
 }
 function save() {
+  if(DEV_ENDGAME) return;
   try { localStorage.setItem(SAVE_KEY,JSON.stringify({v:4,size:SIZE,actions,choiceAxis,record,sound})); }
   catch { /* Play remains available when browser storage is restricted. */ }
 }
@@ -270,6 +273,38 @@ function restore() {
     updateFacing();
   } catch { /* An unreadable save starts a fresh garden. */ }
 }
+function applyDeveloperEndState() {
+  if(!DEV_ENDGAME) return false;
+
+  if(!['win','stuck'].includes(DEV_ENDGAME)) {
+    console.warn('UNDERFOOT_DEV_ENDGAME must be null, \"win\", or \"stuck\".');
+    return false;
+  }
+
+  const previous=freshGarden();
+  history=[{garden:previous,moves:[]}];
+  actions=[];
+  choiceAxis=null;
+  faceLeft=false;
+  moves=['R'];
+
+  if(DEV_ENDGAME==='win') {
+    const soil=Array(SIZE*SIZE).fill(0);
+    const mouse=Math.floor((SIZE*SIZE)/2)-1;
+    soil[mouse]=4;
+    garden={soil,mouse};
+    record=4;
+    return true;
+  }
+
+  const soil=Array(SIZE*SIZE).fill(0);
+  soil[0]=1;
+  soil[1]=2;
+  soil[SIZE]=2;
+  garden={soil,mouse:0};
+  return true;
+}
+
 function updateFacing() {
   faceLeft=moves.slice().reverse().find(d=>d==='L'||d==='R')==='L';
 }
@@ -320,8 +355,17 @@ function motion(element,frames,options) {
   if(!reduceMotion.matches && element.animate) return element.animate(frames,options);
   return null;
 }
+function clearEndStatePresentation() {
+  if(endStateTimer!==null) {
+    clearTimeout(endStateTimer);
+    endStateTimer=null;
+  }
+  endStatePresented=null;
+  board.querySelectorAll('.harvest-seed,.harvest-bloom').forEach(el=>el.remove());
+}
 function stopMotion() {
   generation++; busy=false;
+  clearEndStatePresentation();
   for(const anim of board.getAnimations ? board.getAnimations({subtree:true}) : []) anim.cancel();
   board.querySelectorAll('.ghost,.soil-flash').forEach(el=>el.remove());
 }
@@ -388,6 +432,140 @@ function renderDecisions() {
     board.append(button);
   }
 }
+function currentEndState() {
+  if(garden.soil.includes(4)) return 'win';
+  if(moves.length && matchingTriples(garden).length===0 && legalMoves(garden).length===0) return 'stuck';
+  return null;
+}
+function harvestBloom(pos,delay=0) {
+  const bloom=svgUse('plant3','harvest-bloom');
+  plots[pos].append(bloom);
+  if(reduceMotion.matches || !Element.prototype.animate) {
+    bloom.style.opacity='1';
+    return;
+  }
+  motion(
+    bloom,
+    [
+      {opacity:0,transform:'scale(.18) translateY(8px)'},
+      {opacity:1,transform:'scale(1.08) translateY(-2px)',offset:.72},
+      {opacity:1,transform:'scale(1) translateY(0)'}
+    ],
+    {duration:390,delay,fill:'forwards',easing:'cubic-bezier(.2,.8,.3,1)'}
+  );
+}
+async function celebrateHarvest(ticket) {
+  const sourceRect=plots[garden.mouse].getBoundingClientRect();
+  const boardRect=board.getBoundingClientRect();
+  const sourceX=sourceRect.left-boardRect.left+sourceRect.width*.58;
+  const sourceY=sourceRect.top-boardRect.top+sourceRect.height*.42;
+
+  if(!reduceMotion.matches && Element.prototype.animate) {
+    for(let pos=0;pos<plots.length;pos++) {
+      const rect=plots[pos].getBoundingClientRect();
+      const targetX=rect.left-boardRect.left+rect.width/2;
+      const targetY=rect.top-boardRect.top+rect.height/2;
+      const dx=targetX-sourceX;
+      const dy=targetY-sourceY;
+      const arc=18+(pos%5)*5;
+
+      const seed=document.createElement('span');
+      seed.className='harvest-seed';
+      seed.style.left=(sourceX-3)+'px';
+      seed.style.top=(sourceY-2)+'px';
+      board.append(seed);
+
+      motion(
+        seed,
+        [
+          {opacity:0,transform:'translate(0,0) rotate(-20deg)'},
+          {opacity:1,transform:'translate(0,0) rotate(0deg)',offset:.08},
+          {opacity:1,transform:'translate('+(dx*.52)+'px,'+(dy*.42-arc)+'px) rotate('+(130+(pos%4)*45)+'deg)',offset:.55},
+          {opacity:.92,transform:'translate('+dx+'px,'+dy+'px) rotate('+(260+(pos%6)*35)+'deg)'}
+        ],
+        {
+          duration:540+(pos%7)*32,
+          delay:(pos%6)*18,
+          fill:'forwards',
+          easing:'cubic-bezier(.2,.72,.3,1)'
+        }
+      );
+    }
+
+    await sleep(790);
+    if(ticket!==generation) return false;
+    board.querySelectorAll('.harvest-seed').forEach(el=>el.remove());
+  }
+
+  const originY=Math.floor(garden.mouse/SIZE);
+  const originX=garden.mouse%SIZE;
+  const order=[...Array(plots.length).keys()].sort((a,b)=>{
+    const ay=Math.floor(a/SIZE),ax=a%SIZE;
+    const by=Math.floor(b/SIZE),bx=b%SIZE;
+    return (Math.abs(ay-originY)+Math.abs(ax-originX))-(Math.abs(by-originY)+Math.abs(bx-originX));
+  });
+
+  order.forEach((pos,index)=>harvestBloom(pos,reduceMotion.matches?0:index*18));
+
+  if(!reduceMotion.matches) await sleep(720);
+  return ticket===generation;
+}
+
+
+
+function openEndStateDialog(state) {
+  if(state==='win') {
+    openDialog(
+      'You won! 🌻',
+      ['A Seed head matured in time for harvest. Its seeds have spread across the garden, and the whole field is in bloom.'],
+      [['Play again',newGarden,true],['Undo',undoMove,false]]
+    );
+    return;
+  }
+	
+  openDialog(
+  	'Mouse is stuck. Try again.',
+  	['No path remains to reach a Seed head before harvest.'],
+  	[['Undo',undoMove,true],['New garden',newGarden,false]]
+	); 
+}
+
+async function presentEndState(state,ticket) {
+  endStateTimer=null;
+  if(ticket!==generation || currentEndState()!==state || endStatePresented===state) return;
+
+  while($('dialog').open) {
+    await sleep(180);
+    if(ticket!==generation || currentEndState()!==state) return;
+  }
+
+  endStatePresented=state;
+
+  if(state==='win') {
+    status('Seeds are spreading…');
+    const completed=await celebrateHarvest(ticket);
+    if(!completed || currentEndState()!==state) return;
+    status('The field is ready for harvest.');
+  }
+
+  while($('dialog').open) {
+    await sleep(180);
+    if(ticket!==generation || currentEndState()!==state) return;
+  }
+
+  if(ticket!==generation || currentEndState()!==state) return;
+  openEndStateDialog(state);
+}
+function scheduleEndState() {
+  const state=currentEndState();
+  if(!state || busy || endStateTimer!==null || endStatePresented===state) return;
+
+  const ticket=generation;
+  const delay=state==='win' ? 620 : 720;
+
+  endStateTimer=setTimeout(()=>presentEndState(state,ticket),delay);
+}
+
 function refresh(lastLevel) {
   choices=matchingTriples(garden);
   decisions=!busy?decisionOptions(garden,choices,choiceAxis):[];
@@ -406,6 +584,8 @@ function refresh(lastLevel) {
   else if(decisions.some(option=>option.label)) status('Choose a line with a shown arrow.');
   else if(decisions.length) status('Choose three. Press or tap a shown arrow.');
   else status(moveMessage(lastLevel));
+
+  if(!busy && !choices.length) scheduleEndState();
 }
 function chooseDirection(direction) {
   if(busy || $('dialog').open) return;
@@ -507,6 +687,7 @@ $('help').onclick=()=>openDialog('How to play',[
   'A single matching trio grows automatically, including each forced step in a cascade. Exactly three matching plants combine each time, horizontally, vertically, or diagonally.',
   'When several trios are possible, matching plants glow. Each shown arrow sits at the centre of its trio. Press that arrow key, swipe that direction, or tap the arrow to grow it immediately. Hover or focus an arrow to preview the exact three.',
   'At crowded crossings with more than four choices, choose a line first, then a trio. Escape returns to the line choice. Grow a seed head to win.',
+  'If the mouse runs out of neighbouring bare soil, the garden ends. Undo to find another route or start a new garden.',
   'Undo or Z returns to the previous move or choice, including its automatic growth. You can undo all the way to the beginning.'
 ],[['Back to the garden',null,true]]);
 $('restart').onclick=()=>{
@@ -552,5 +733,5 @@ window.addEventListener('pointerup',event=>{
 });
 window.addEventListener('pointercancel',()=>{gesture=null;});
 window.addEventListener('blur',()=>{gesture=null;});
-prepareBoard();restore();soundButton();
+prepareBoard();restore();applyDeveloperEndState();soundButton();
 refresh();resolveGrowth();
