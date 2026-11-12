@@ -1,0 +1,54 @@
+*temp
+*tmp
+
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.jekyll.log
+.sass-cache/
+
+# Bundler
+.bundle/
+vendor/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+
+# Credentials and private configuration
+credentials.*
+secrets.*
+secret.*
+config.local.*
+*_credentials.*
+*_secrets.*
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
